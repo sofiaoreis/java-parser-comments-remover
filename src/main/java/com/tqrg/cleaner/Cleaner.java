@@ -13,7 +13,8 @@ import java.util.regex.*;
 import java.io.*;
 
 public class Cleaner 
-{
+{   
+    
     public static void main( String[] args )
     {
         //@TODO: Verify if the .jar exists in the dir
@@ -29,9 +30,7 @@ public class Cleaner
         }
 
         try {
-            System.out.println(args[0]);
-            System.out.println(args[1]);
-
+            // @TODO: Check if there is a way of not using 2 FileInputStreams for the same file
             FileInputStream in = new FileInputStream(args[0]);
             CompilationUnit cu = JavaParser.parse(in);
             FileInputStream in2 = new FileInputStream(args[0]);
@@ -47,10 +46,13 @@ public class Cleaner
 
                 if(line.toString().trim().equals(cu.getPackageDeclaration().get().toString().trim()) && initialComments)
                     initialComments = false;
-
+                
                 if(initialComments)
                     writer.write("\n");
                 
+                /**
+                    @TODO: This is a workaround for https://github.com/javaparser/javaparser/issues/1574. Try to solve it, and then refactor it.
+                 */
                 if(!initialComments)
                     if((cu.getComments().toString().trim()).contains(line.toString().trim()) && !line.toString().trim().matches("^([ ]*)\\}")){
                         writer.write("\n");
