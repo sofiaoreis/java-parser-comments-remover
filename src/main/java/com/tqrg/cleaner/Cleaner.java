@@ -35,7 +35,7 @@ public class Cleaner
             CompilationUnit cu = JavaParser.parse(in);
             FileInputStream in2 = new FileInputStream(args[0]);
             File file = new File(args[1]);
-
+			
             BufferedReader br = new BufferedReader(new InputStreamReader(in2));
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
@@ -43,10 +43,9 @@ public class Cleaner
             boolean initialComments = true;
 	        
             while ((line = br.readLine()) != null) {
-
-                if(line.toString().trim().equals(cu.getPackageDeclaration().get().toString().trim()) && initialComments)
+				if(line.toString().trim().contains(cu.getPackageDeclaration().get().toString().trim()) && initialComments)
                     initialComments = false;
-                
+                								
                 if(initialComments)
                     writer.write("\n");
                 
